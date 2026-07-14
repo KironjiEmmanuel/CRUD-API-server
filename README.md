@@ -44,8 +44,3 @@ content-type: application/json
 
 ![Swagger UI screenshot](./swagger_screenshot.png)
 
-## Known Issues
-
-- **`GET /tasks/{id}` has a logic bug**: the `raise HTTPException(404...)` sits inside the `for` loop body (not in an `else` clause), so it fires on the first non-matching task instead of only after checking the whole list. Fetching by ID will often 404 incorrectly unless the match happens to be first. Fix: move the `raise` outside the loop, or use an early `return` + loop-`else`.
-- Data is in-memory only — no persistence layer.
-- `/Health` uses a capital `H`; consider lowercasing to `/health` to match convention.
