@@ -1,7 +1,7 @@
-from typing import Optional
 from fastapi import FastAPI,HTTPException
 from fastapi.responses import JSONResponse,Response
 from pydantic import BaseModel
+from typing import Optional
 import uvicorn
 tasks = [
     {"id": 1, "title": "Buy groceries", "done": False},
@@ -34,7 +34,7 @@ def create_task(task: TaskCreate):
     if not task.title.strip():
         return JSONResponse(
             status_code=400,
-            content={"error": "Title is required and cannot be empty"}
+            content={"error": "Title  cannot be empty"}
         )
 
     next_id = max((t["id"] for t in tasks), default=0) + 1
@@ -52,7 +52,7 @@ def update_task(id: int, update: TaskUpdate):
     if update.title is None and update.done is None:
         return JSONResponse(
             status_code=400,
-            content={"error": "Provide at least a title or done value to update"}
+            content={"error": "Provide a title or done value to update"}
         )
 
     
