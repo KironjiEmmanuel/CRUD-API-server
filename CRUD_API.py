@@ -1,12 +1,14 @@
+from typing import Optional
 from fastapi import FastAPI,HTTPException
 from fastapi.responses import JSONResponse,Response
 from pydantic import BaseModel
+import uvicorn
 tasks = [
     {"id": 1, "title": "Buy groceries", "done": False},
     {"id": 2, "title": "Finish FastAPI tutorial", "done": True},
     {"id": 3, "title": "Walk the dog", "done": False},
 ]
-import uvicorn
+
 app=FastAPI()
 
 @app.get("/")
@@ -25,9 +27,8 @@ def get_task(id: int):
             return task 
         raise HTTPException(status_code=404, detail=f"Task {id} not found")
     
-   class TaskCreate(BaseModel):
+class TaskCreate(BaseModel):
     title: str = ""
-
 @app.post("/tasks")
 def create_task(task: TaskCreate):
     if not task.title.strip():
@@ -54,12 +55,7 @@ def update_task(id: int, update: TaskUpdate):
             content={"error": "Provide at least a title or done value to update"}
         )
 
-    if update.title is not None and not update.title.strip():
-        return JSONResponse(
-            status_code=400,
-            content={"error": "Title cannot be empty"}
-        )
-
+    
     for task in tasks:
         if task["id"] == id:
             if update.title is not None:
